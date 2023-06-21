@@ -1,9 +1,13 @@
 #include <HardwareSerial.h>
+#include "pins.h"
 
 HardwareSerial mySerial(0); // RX, TX
 
 void call();
 void message();
+
+void gsm_setup();
+void gsm_loop();
 
 void gsm_setup() {
   Serial.begin(115200);

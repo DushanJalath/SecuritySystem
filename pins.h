@@ -1,12 +1,19 @@
-#define resetPin 8
-#define dataPin 7
-#define clockPin 6
-//solinoidLock
-#define lockPin 9
-#define pirDataPin 10
-//buzzer
-#define buzzerPin 13
-//sucessLED
-#define sucessLED 12
-//fail led
-#define failLED 11
+#define PIR 15
+
+#define FINGERPRINT_TX 17
+#define FINGERPRINT_RX 16
+
+#define GSM_TX 3
+#define GSM_RX 1
+
+#define S_LED 35
+#define F_LED 34
+
+#define CLK_PIN 27
+#define DAT_PIN 14
+#define RST_PIN 12
+
+
+#define BUZZER_PIN 4
+#define LOCK_PIN 23
+#define RST_SWH 19

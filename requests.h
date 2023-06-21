@@ -7,7 +7,7 @@ const char* password = "11112222";
 String parameterValue;
 WiFiServer server(80);
 
-void setup() {
+void wifi_setup() {
   Serial.begin(115200);
   delay(1000);
 
@@ -25,7 +25,10 @@ void setup() {
   server.begin();
 }
 
-void loop() {
+String wifi_loop() {
+  while (true){
+    
+  }
   WiFiClient client = server.available();
 
   if (client) {
@@ -44,6 +47,7 @@ void loop() {
 
         Serial.print("Parameter value: ");
         Serial.println(parameterValue);
+        return parameterValue;
         // Here, you can process the request and perform actions accordingly
 
         client.println("HTTP/1.1 200 OK");
@@ -58,8 +62,4 @@ void loop() {
     // client.stop();
     // Serial.println("Client disconnected");
   }
-}
-
-String returnValue(){
-  return parameterValue;
 }

@@ -1,5 +1,6 @@
 #include <Adafruit_Fingerprint.h>
 #include <HardwareSerial.h>
+#include "pins.h"
 #include "gsm.h"
 
 #if (defined(__AVR__) || defined(ESP8266)) && !defined(__AVR_ATmega2560__)
@@ -13,12 +14,15 @@ HardwareSerial mySerial(1);
 #define mySerial Serial1
 #endif
 
+int getFingerprintIDez();
+int fingerprint_loop();
+
 int fprintx[3];
 uint8_t count = 0;
 
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
-void setup()
+void fingerprint_setup()
 {
   Serial.begin(115200);
   while (!Serial); 
@@ -55,54 +59,51 @@ void setup()
   }
 }
 
-void loop()
-{
+int fingerprint_loop(){
 
-  ////////// GSM Loop
-  gsm_loop();
+    ////////// GSM Loop
+    gsm_loop();
 
 
-  uint8_t warn = 0;
-  int var;
-  uint8_t j;
-  bool duplicate;
-  
-  while (count < 3) {
-    duplicate = false;
+    uint8_t warn = 0;
+    int var;
+    uint8_t j;
+    bool duplicate;
     
-    var = getFingerprintIDez();
-    
-    j = 0;
-    while (j < count) {
-      if (var == fprintx[j]) {
-        duplicate = true;
-        break;
+    while (count < 3) {
+      duplicate = false;
+      
+      var = getFingerprintIDez();
+      
+      j = 0;
+      while (j < count) {
+        if (var == fprintx[j]) {
+          duplicate = true;
+          break;
+        }
+        j++;
       }
-      j++;
+      
+      if ((var != -1) && (duplicate == false)) {
+        fprintx[count] = var;
+        count++;
+      }
+
+      if (warn > 20) {
+        // (send SMS)-warn!!!
+      }
+
+      warn++;
     }
     
-    if ((var != -1) && (duplicate == false)) {
-      fprintx[count] = var;
+    if (count == 3) {
       count++;
+      delay(500);
+      return 1;
     }
-
-    if (warn > 20) {
-      // (send SMS)-warn!!!
-    }
-
-    warn++;
-  }
-  
-  if (count == 3) {
-    Serial.println("Access Granted!!!");
-    call();
-    delay(15000);
-    message();
-    count++;
-    delay(500);
-  }
-  
-  delay(5000);           
+    
+    delay(5000);   
+    return -1;        
 }
 
 
